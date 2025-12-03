@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1212 特價專區 - 升降桌比價王</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="index.html" class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                升降桌比價王
+            </a>
+            <div class="search-container">
+                <div style="font-size: 1.5rem; font-weight: 700; color: #ff6b6b;">🎉 1212 特價專區</div>
+                <div id="lastUpdated" class="last-updated">更新時間:載入中...</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="padding: 3rem 0;">
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 1rem;">
+                限時特價商品
+            </h1>
+            <p style="font-size: 1.2rem; color: var(--text-secondary);">
+                精選超值優惠,數量有限,售完為止!
+            </p>
+        </div>
+
+        <div id="resultsContainer"></div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="index.html"
+                style="display: inline-block; padding: 1rem 2rem; background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%); color: white; text-decoration: none; border-radius: 0.75rem; font-size: 1.1rem; font-weight: 600;">
+                返回所有商品
+            </a>
+        </div>
+    </main>
+
+    <!-- Load Mock Data first -->
+    <script src="mockData.js"></script>
+    <!-- Load Promotion Logic -->
+    <script>
+        // Force use fresh data from mockData
+        let promotionProducts = products.filter(p => p.isPromotion === true);
+
+        console.log('Total products:', products.length);
+        console.log('Promotion products:', promotionProducts.length);
+        console.log('Promotion products:', promotionProducts.map(p => p.name));
+
+        // Render products
+        function renderPromotionProducts() {
+            const container = document.getElementById('resultsContainer');
+
+            if (promotionProducts.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 3rem; color: var(--text-secondary); font-size: 1.2rem;">目前沒有特價商品<br><small>請檢查 mockData.js 中是否有商品標記為 isPromotion: true</small></div>';
+                return;
+            }
+
+            const grid = document.createElement('div');
+            grid.className = 'product-grid';
+            grid.style.maxWidth = '1000px';
+            grid.style.margin = '0 auto';
+
+            const sizeKeywords = {
+                'small': '小尺寸',
+                'standard': '標準',
+                'large': '大尺寸',
+                'xl': 'L型'
+            };
+
+            promotionProducts.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.style.border = '2px solid #ff6b6b';
+                card.style.position = 'relative';
+
+                let priceIcon = '';
+                let priceClass = '';
+
+                if (product.priceChange === 'down') {
+                    priceIcon = '<span class="price-change-indicator price-drop">↓</span>';
+                    priceClass = 'price-drop';
+                } else if (product.priceChange === 'up') {
+                    priceIcon = '<span class="price-change-indicator price-rise">↑</span>';
+                    priceClass = 'price-rise';
+                }
+
+                const formattedPrice = product.price.toLocaleString();
+                const sizeKeyword = sizeKeywords[product.size] || '';
+                const searchQuery = `${product.category} ${sizeKeyword}`.trim();
+
+                // Dynamic promotion label
+                const label = product.promotionLabel || '🔥 特價';
+                const labelBg = product.promotionLabel ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : 'linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%)';
+
+                // Generate direct platform link
+                let platformUrl = '#';
+                // User requested to use '升降桌' as the universal search keyword
+                const encodedName = encodeURIComponent('升降桌');
+
+                if (product.platform.includes('Momo')) {
+                    platformUrl = `https://m.momoshop.com.tw/search.momo?searchKeyword=${encodedName}`;
+                } else if (product.platform.includes('蝦皮')) {
+                    platformUrl = `https://shopee.tw/search?keyword=${encodedName}`;
+                } else if (product.platform.includes('PChome 24hr')) {
+                    platformUrl = `https://24h.pchome.com.tw/search/?q=${encodedName}`;
+                } else if (product.platform.includes('PChome')) {
+                    platformUrl = `https://ecshweb.pchome.com.tw/search/v3.3/?q=${encodedName}`;
+                } else if (product.platform.includes('Yahoo')) {
+                    platformUrl = `https://tw.buy.yahoo.com/search/product?p=${encodedName}`;
+                } else if (product.platform.includes('IKEA')) {
+                    platformUrl = `https://www.ikea.com.tw/zh/search?q=${encodedName}`;
+                } else if (product.platform.includes('樂天')) {
+                    platformUrl = `https://www.rakuten.com.tw/search/${encodedName}`;
+                } else if (product.platform.includes('FLEXISPOT')) {
+                    platformUrl = `https://www.azure4u.com/v2/official/SalePageCategory/528796?sortMode=${encodedName}`;
+                } else if (product.platform.includes('MOTTI')) {
+                    platformUrl = `https://www.mottilife.com/products?query=${encodedName}`;
+                } else if (product.platform.includes('FUNTE')) {
+                    platformUrl = `https://www.funte.tw/`;
+                } else if (product.platform.includes('Bestmade')) {
+                    platformUrl = `https://bestmade.com.tw/`;
+                } else if (product.platform.includes('DEZCTOP')) {
+                    platformUrl = `https://dezctop.com/tw`;
+                } else {
+                    // Fallback to Google Shopping if unknown platform
+                    platformUrl = `https://www.google.com/search?tbm=shop&q=${encodedName}`;
+                }
+
+                card.innerHTML = `
+                    <div style="position: absolute; top: 1rem; right: 1rem; background: ${labelBg}; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 700; font-size: 0.9rem; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                        ${label}
+                    </div>
+                    <div class="product-image-container">
+                        <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">${product.category}</div>
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="rating">
+                            <span>★</span> ${product.rating} (${product.reviews})
+                        </div>
+                        <div class="product-meta">
+                            <div class="product-price ${priceClass}">
+                                NT$${formattedPrice} ${priceIcon}
+                            </div>
+                            <div class="product-platform">${product.platform}</div>
+                        </div>
+                        <a href="${platformUrl}" target="_blank" class="google-btn" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            前往賣場
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            container.appendChild(grid);
+
+            // Add product count display
+            const countDiv = document.createElement('div');
+            countDiv.style.textAlign = 'center';
+            countDiv.style.color = 'var(--text-secondary)';
+            countDiv.style.marginTop = '2rem';
+            countDiv.style.fontSize = '1.1rem';
+            countDiv.textContent = `共 ${promotionProducts.length} 件特價商品`;
+            container.appendChild(countDiv);
+        }
+
+        // Update time display
+        function updateTimeDisplay() {
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('lastUpdated').textContent = `更新時間:${dateStr}`;
+        }
+
+        // Init
+        renderPromotionProducts();
+        updateTimeDisplay();
+    </script>
+</body>
+
+</html>

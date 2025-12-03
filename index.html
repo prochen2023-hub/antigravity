@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>升降桌比價王 - 找尋最適合您的工作桌</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                升降桌比價王
+            </a>
+            <div class="search-container">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="text" id="searchInput" class="search-input" placeholder="搜尋升降桌 (例如：電動, 實木, IKEA)...">
+                <div id="lastUpdated" class="last-updated">更新時間：載入中...</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container main-content">
+        <!-- Sidebar Filters -->
+        <aside class="filters">
+            <div class="filter-section">
+                <a href="promotion.html" id="promotionLink" class="promotion-link">🎉 1212 特價專區</a>
+            </div>
+
+            <div class="filter-section">
+                <h3 class="filter-title">升降桌分類</h3>
+                <ul class="category-list">
+                    <li class="category-item">
+                        <label class="category-label">
+                            <input type="radio" name="category" value="all" checked> 所有分類
+                        </label>
+                    </li>
+                    <li class="category-item">
+                        <label class="category-label">
+                            <input type="radio" name="category" value="電動升降桌"> 電動升降桌
+                        </label>
+                    </li>
+                    <li class="category-item">
+                        <label class="category-label">
+                            <input type="radio" name="category" value="手搖/氣壓升降桌"> 手搖/氣壓升降桌
+                        </label>
+                    </li>
+                    <li class="category-item">
+                        <label class="category-label">
+                            <input type="radio" name="category" value="L型/轉角升降桌"> L型/轉角升降桌
+                        </label>
+                    </li>
+                    <li class="category-item">
+                        <label class="category-label">
+                            <input type="radio" name="category" value="桌上型升降台"> 桌上型升降台
+                        </label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="filter-section">
+                <h3 class="filter-title">商品尺寸</h3>
+                <ul class="category-list">
+                    <li class="category-item">
+                        <label class="category-label">
+                            <input type="radio" name="size" value="all" checked> 所有尺寸
+                        </label>
+                    </li>
+                    <li class="category-item">
+                        <label class="category-label">
+                            <input type="radio" name="size" value="small"> 桌上型/小尺寸 (< 100cm) </label>
+                    </li>
+                    <li class="category-item">
+                        <label class="category-label">
+                            <input type="radio" name="size" value="standard"> 標準單人 (100-120cm)
+                        </label>
+                    </li>
+                    <li class="category-item">
+                        <label class="category-label">
+                            <input type="radio" name="size" value="large"> 舒適寬敞 (121-150cm)
+                        </label>
+                    </li>
+                    <li class="category-item">
+                        <label class="category-label">
+                            <input type="radio" name="size" value="xl"> 大型/L型 (> 150cm)
+                        </label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="filter-section">
+                <h3 class="filter-title">價格範圍 (TWD)</h3>
+                <div class="price-inputs">
+                    <input type="number" id="minPrice" class="price-input" placeholder="最低" min="0">
+                    <span>-</span>
+                    <input type="number" id="maxPrice" class="price-input" placeholder="最高" min="0">
+                </div>
+            </div>
+        </aside>
+
+        <!-- Product Grid -->
+        <section class="results">
+            <div class="results-header">
+                <span id="resultCount" style="color: var(--text-secondary);">載入中...</span>
+                <select id="sortSelect" class="sort-select">
+                    <option value="default">排序：精選推薦</option>
+                    <option value="price-low" selected>價格：低到高</option>
+                    <option value="price-high">價格：高到低</option>
+                </select>
+            </div>
+            <div id="resultsContainer">
+                <!-- Products or Category Sections will be injected here by JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Load Mock Data first -->
+    <script src="mockData.js"></script>
+    <!-- Load App Logic -->
+    <script src="script.js"></script>
+</body>
+
+</html>
